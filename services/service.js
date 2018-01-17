@@ -7,8 +7,21 @@ module.exports.init = (api_key, user_name) => {
 	username = user_name;
 };
 
-module.exports.send = (method, endpoint, params) => {
-	return sendRequest(method, endpoint, params);
+module.exports.send = async(method, endpoint, params) => {
+	return (await sendRequest(method, endpoint, params));
+};
+
+module.exports.isExists = async(list_id, query) => {
+	try {
+		const result = await module.exports.send('GET', '/search-members', {
+			query,
+			list_id
+		});
+
+		return result.exact_matches.total_items > 0;
+	} catch(e) {
+		return false;
+	}
 };
 
 /**
@@ -19,7 +32,7 @@ module.exports.send = (method, endpoint, params) => {
  * @param apiKey
  * @returns {*}
  */
-function sendRequest(method, endpoint, params) {
+async function sendRequest(method, endpoint, params) {
 	if (apikey === null || apikey === undefined) {
 		throw new Error('Missing api key');
 	}
