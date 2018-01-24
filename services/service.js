@@ -40,9 +40,9 @@ async function sendRequest(method, endpoint, params) {
 	if (username === null || username === undefined) {
 		throw new Error('Missing user name');
 	}
-
+    const mailchimpServer = apikey.split('-')[1];
 	const options = {
-		uri: `https://us13.api.mailchimp.com/3.0${endpoint}`,
+		uri: `https://${mailchimpServer}.api.mailchimp.com/3.0${endpoint}`,
 		port: 443,
 		method: method,
 		headers: {
